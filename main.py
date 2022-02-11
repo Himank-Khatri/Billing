@@ -1,31 +1,80 @@
 import datetime
-from datetime import date
+import pickle
 
-today = datetime.datetime.now().today()
+empty = {}
 
-inv = {'toothbrush': {'price': 10, 'quantity': 100, 'gst':18}} 
-daily_sale = {}
+try:
+	with open('inventory.txt', 'rb') as f:
+	    inv = pickle.load(f)
+
+	with open('daily_report.txt', 'rb') as f:
+		daily_sale = pickle.load(f)
+
+except:
+	with open('inventory.txt', 'wb') as f:
+		pickle.dump({},f)
+
+	with open('daily_report.txt', 'wb') as f:
+		pickle.dump({},f)
+
+	with open('inventory.txt', 'rb') as f:
+	    inv = pickle.load(f)
+
+	with open('daily_report.txt', 'rb') as f:
+		daily_sale = pickle.load(f)
+
+try:
+
+	with open('date.txt', 'rb') as f:
+		today = pickle.load(f)
+
+except:
+	with open('date.txt', 'wb') as f:
+		pickle.load(datetime.date.today(), f)
 
 def add_to_inventory(name, price, quantity, gst):
 	inv[name] = {'price': price, 'quantity': quantity, 'gst': gst}
 
+	with open('inventory.txt', 'wb') as f:
+		pickle.dump(inv,f)
+
 def item_sale(name, quantity=1):
 
 	global daily_sale
+	global today
+	global today1
 
-	if datetime.datetime.now().today() > today:
-		daily_sale = {}
+	if datetime.date.today() > today:
+		print(f'{datetime.date.today()} is greater than {today}')
+
+		today = datetime.date.today()
+		today = today
+
+		with open('date.txt', 'wb') as f:
+			pickle.dump(today,f)
+		with open('date.txt', 'rb') as f:
+			print(pickle.load(f))
+			
+		with open('daily_report.txt', 'wb') as f:
+			pickle.dump(empty,f)
+			print('resetting daily_report')
+		daily_sale = empty
 
 	if inv[name]['quantity'] == 0:
 		print('Item out of stock')	
 	
 	else:
 		inv[name]['quantity'] = inv[name]['quantity'] - quantity
+		with open('inventory.txt', 'wb') as f:
+			pickle.dump(inv,f)
 		try:
 			daily_sale[name] += quantity
 		except:
 			daily_sale[name] = 0
 			daily_sale[name] += quantity
+
+	with open('daily_report.txt', 'wb') as f:
+		pickle.dump(daily_sale,f)
 
 	sales_report()
 
@@ -34,12 +83,13 @@ def sales_report():
 	gst = 0
 	for i in daily_sale:
 		sales += daily_sale[i]*inv[i]['price']
+		
 		gst += sales*inv[i]['gst']/100
 
 	revenue = sales - gst
 
 	statement = f'Sales : {sales}\nGST : {gst} \nTotal : {revenue}'
 
-	with open(f'{date.today().strftime("%d.%m.%Y")} sales report.txt', 'w+') as f:
+	with open('directory' + f'{datetime.datetime.today().strftime("%d.%m.%Y")} sales report.txt', 'w+') as f:
 		f.write(statement)
 
