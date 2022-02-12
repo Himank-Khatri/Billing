@@ -4,21 +4,26 @@ import pickle
 empty = {}
 
 try:
+
 	with open('inventory.txt', 'rb') as f:
 	    inv = pickle.load(f)
+except:
+
+	with open('inventory.txt', 'wb') as f:
+		pickle.dump({},f)
+
+	with open('inventory.txt', 'rb') as f:
+	    inv = pickle.load(f)
+
+try:	    
 
 	with open('daily_report.txt', 'rb') as f:
 		daily_sale = pickle.load(f)
 
 except:
-	with open('inventory.txt', 'wb') as f:
-		pickle.dump({},f)
 
 	with open('daily_report.txt', 'wb') as f:
 		pickle.dump({},f)
-
-	with open('inventory.txt', 'rb') as f:
-	    inv = pickle.load(f)
 
 	with open('daily_report.txt', 'rb') as f:
 		daily_sale = pickle.load(f)
@@ -29,10 +34,17 @@ try:
 		today = pickle.load(f)
 
 except:
+
 	with open('date.txt', 'wb') as f:
 		pickle.load(datetime.date.today(), f)
 
 def add_to_inventory(name, price, quantity, gst):
+	inv[name] = {'price': price, 'quantity': quantity, 'gst': gst}
+
+	with open('inventory.txt', 'wb') as f:
+		pickle.dump(inv,f)
+
+def update_inventory(name, price, quantity, gst):
 	inv[name] = {'price': price, 'quantity': quantity, 'gst': gst}
 
 	with open('inventory.txt', 'wb') as f:
@@ -45,19 +57,15 @@ def item_sale(name, quantity=1):
 	global today1
 
 	if datetime.date.today() > today:
-		print(f'{datetime.date.today()} is greater than {today}')
 
 		today = datetime.date.today()
 		today = today
 
 		with open('date.txt', 'wb') as f:
 			pickle.dump(today,f)
-		with open('date.txt', 'rb') as f:
-			print(pickle.load(f))
 			
 		with open('daily_report.txt', 'wb') as f:
 			pickle.dump(empty,f)
-			print('resetting daily_report')
 		daily_sale = empty
 
 	if inv[name]['quantity'] == 0:
@@ -90,6 +98,5 @@ def sales_report():
 
 	statement = f'Sales : {sales}\nGST : {gst} \nTotal : {revenue}'
 
-	with open('directory' + f'{datetime.datetime.today().strftime("%d.%m.%Y")} sales report.txt', 'w+') as f:
+	with open('C:\\Users\\Khatri\\Desktop\\Python\\Projects\\Billing\\SalesData\\' + f'{datetime.datetime.today().strftime("%d.%m.%Y")} sales report.txt', 'w+') as f:
 		f.write(statement)
-
