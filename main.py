@@ -2,6 +2,7 @@ import datetime
 import pickle
 
 empty = {}
+dir = ''
 
 try:
 
@@ -98,5 +99,5 @@ def sales_report():
 
 	statement = f'Sales : {sales}\nGST : {gst} \nTotal : {revenue}'
 
-	with open('C:\\Users\\Khatri\\Desktop\\Python\\Projects\\Billing\\SalesData\\' + f'{datetime.datetime.today().strftime("%d.%m.%Y")} sales report.txt', 'w+') as f:
+	with open(dir + f'{datetime.datetime.today().strftime("%d.%m.%Y")} sales report.txt', 'w+') as f:
 		f.write(statement)
