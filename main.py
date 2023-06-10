@@ -6,49 +6,49 @@ dir = ''
 
 try:
 
-	with open('inventory.txt', 'rb') as f:
+	with open('inventory.bin', 'rb') as f:
 	    inv = pickle.load(f)
 except:
 
-	with open('inventory.txt', 'wb') as f:
+	with open('inventory.bin', 'wb') as f:
 		pickle.dump({},f)
 
-	with open('inventory.txt', 'rb') as f:
+	with open('inventory.bin', 'rb') as f:
 	    inv = pickle.load(f)
 
 try:	    
 
-	with open('daily_report.txt', 'rb') as f:
+	with open('daily_report.bin', 'rb') as f:
 		daily_sale = pickle.load(f)
 
 except:
 
-	with open('daily_report.txt', 'wb') as f:
+	with open('daily_report.bin', 'wb') as f:
 		pickle.dump({},f)
 
-	with open('daily_report.txt', 'rb') as f:
+	with open('daily_report.bin', 'rb') as f:
 		daily_sale = pickle.load(f)
 
 try:
 
-	with open('date.txt', 'rb') as f:
+	with open('date.bin', 'rb') as f:
 		today = pickle.load(f)
 
 except:
 
-	with open('date.txt', 'wb') as f:
+	with open('date.bin', 'wb') as f:
 		pickle.load(datetime.date.today(), f)
 
 def add_to_inventory(name, price, quantity, gst):
 	inv[name] = {'price': price, 'quantity': quantity, 'gst': gst}
 
-	with open('inventory.txt', 'wb') as f:
+	with open('inventory.bin', 'wb') as f:
 		pickle.dump(inv,f)
 
 def update_inventory(name, price, quantity, gst):
 	inv[name] = {'price': price, 'quantity': quantity, 'gst': gst}
 
-	with open('inventory.txt', 'wb') as f:
+	with open('inventory.bin', 'wb') as f:
 		pickle.dump(inv,f)
 
 def item_sale(name, quantity=1):
@@ -62,10 +62,10 @@ def item_sale(name, quantity=1):
 		today = datetime.date.today()
 		today = today
 
-		with open('date.txt', 'wb') as f:
+		with open('date.bin', 'wb') as f:
 			pickle.dump(today,f)
 			
-		with open('daily_report.txt', 'wb') as f:
+		with open('daily_report.bin', 'wb') as f:
 			pickle.dump(empty,f)
 		daily_sale = empty
 
